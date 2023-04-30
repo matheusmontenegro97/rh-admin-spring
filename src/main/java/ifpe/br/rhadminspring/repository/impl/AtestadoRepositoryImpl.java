@@ -39,17 +39,13 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
         return GridFSBuckets.create(mongoClient.getDatabase("rhadmin-spring"));
     }
 
-    public Atestado saveAtestado(MultipartFile multipartFile, String codigoFuncionario) throws Exception {
-
-        Atestado atestado = new Atestado();
-        File file = convertMultiPartToFile(multipartFile);
-        atestado.setCodigoAtestado(UUID.randomUUID().toString());
-        atestado.setCodigoFuncionario(codigoFuncionario);
-        atestado.setAtestado(file);
-
+    public Atestado saveAtestado(Atestado atestado) throws Exception {
         Optional.of(funcionarioRepository.findFuncionarioById(atestado.getCodigoFuncionario()))
                 .orElseThrow(() -> new FuncionarioNotFoundException(String.format("Funcionario com id: %s não encontrado", atestado.getCodigoFuncionario())));
 
+        atestado.setCodigoAtestado(UUID.randomUUID().toString());
+
+        File file = new File(atestado.getAtestado());
         InputStream targetStream = new FileInputStream(file);
         getGridFSBuckets().uploadFromStream(atestado.getCodigoAtestado(), targetStream);
 
@@ -61,13 +57,4 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
 
         return atestado;
     }
-
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convertedFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convertedFile;
-    }
-
 }

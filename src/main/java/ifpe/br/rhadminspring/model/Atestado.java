@@ -1,16 +1,14 @@
 package ifpe.br.rhadminspring.model;
 
-import java.io.File;
-
 public class Atestado {
     private String codigoAtestado;
     private String codigoFuncionario;
-    private File atestado;
+    private String atestado;
 
     public Atestado() {
     }
 
-    public Atestado(String codigoFuncionario, File atestado) {
+    public Atestado(String codigoFuncionario, String atestado) {
         this.codigoFuncionario = codigoFuncionario;
         this.atestado = atestado;
     }
@@ -31,11 +29,11 @@ public class Atestado {
         this.codigoFuncionario = codigoFuncionario;
     }
 
-    public File getAtestado() {
+    public String getAtestado() {
         return atestado;
     }
 
-    public void setAtestado(File atestado) {
+    public void setAtestado(String atestado) {
         this.atestado = atestado;
     }
 }

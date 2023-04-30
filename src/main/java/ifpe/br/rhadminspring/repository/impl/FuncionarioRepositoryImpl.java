@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
+import static java.lang.String.format;
 
 @Component
 public class FuncionarioRepositoryImpl implements FuncionarioRepository {
@@ -29,8 +30,13 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepository {
     @Autowired
     private ObjectMapper om;
 
+    public FuncionarioRepositoryImpl(MongoClient mongoClient, ObjectMapper om) {
+        this.mongoClient = mongoClient;
+        this.om = om;
+    }
 
-    private MongoCollection<Document> getCollection() {
+
+    public MongoCollection<Document> getCollection() {
         CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
         return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring").withCodecRegistry(pojoCodecRegistry);
     }
@@ -104,11 +110,15 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepository {
     }
 
     @Override
-    public void deleteFuncionarioById(String codigoFuncionario) {
+    public String deleteFuncionarioById(String codigoFuncionario) {
         Document query = new Document();
         query.append("codigoFuncionario", codigoFuncionario);
 
         getCollection().deleteOne(query);
+
+        String messageDeleteSuccess = format("Funcionário com codigoFuncionario %s foi deletado com sucesso", codigoFuncionario);
+
+        return messageDeleteSuccess;
     }
 
     private Document findDocumentById(String codigoFuncionario) {

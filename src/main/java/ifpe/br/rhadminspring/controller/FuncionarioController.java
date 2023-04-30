@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import ifpe.br.rhadminspring.model.Funcionario;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static java.lang.String.format;
 
 @RestController
 @RequestMapping("/rh/api")
@@ -16,31 +20,30 @@ public class FuncionarioController {
     FuncionarioRepository funcionarioRepository;
 
     @GetMapping
-    public List<Funcionario> getFuncionarios() throws JsonProcessingException {
-        return funcionarioRepository.findAll();
+    public ResponseEntity<List<Funcionario>> getFuncionarios() throws JsonProcessingException {
+        return ResponseEntity.ok(funcionarioRepository.findAll());
     }
 
 
     @GetMapping("/{id}")
-    public Funcionario getFuncionario
+    public ResponseEntity<Funcionario> getFuncionario
             (@PathVariable("id") String id) throws JsonProcessingException {
-        return funcionarioRepository.findFuncionarioById(id);
+        return ResponseEntity.ok(funcionarioRepository.findFuncionarioById(id));
     }
 
     @PutMapping("/{id}")
-    public Funcionario updateFuncionarios
+    public ResponseEntity<Funcionario> updateFuncionario
             (@PathVariable("id") String id, @RequestBody Funcionario funcionario) {
-        return funcionarioRepository.updateFuncionario(id, funcionario);
+        return ResponseEntity.ok(funcionarioRepository.updateFuncionario(id, funcionario));
     }
 
     @PostMapping
-    public Funcionario addFuncionario(@RequestBody Funcionario funcionario) {
-
-        return funcionarioRepository.saveFuncionario(funcionario);
+    public ResponseEntity<Funcionario> saveFuncionario(@RequestBody Funcionario funcionario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioRepository.saveFuncionario(funcionario));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFuncionario(@PathVariable("id") String id) {
-        funcionarioRepository.deleteFuncionarioById(id);
+    public ResponseEntity<String> deleteFuncionario(@PathVariable("id") String id) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(funcionarioRepository.deleteFuncionarioById(id));
     }
 }

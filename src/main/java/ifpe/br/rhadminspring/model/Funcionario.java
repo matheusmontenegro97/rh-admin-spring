@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Funcionario {
@@ -88,6 +89,19 @@ public class Funcionario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Funcionario that = (Funcionario) o;
+        return codigoFuncionario.equals(that.codigoFuncionario) && nome.equals(that.nome) && nomeSocial.equals(that.nomeSocial) && cargo.equals(that.cargo) && dataNascimento.equals(that.dataNascimento) && cpf.equals(that.cpf) && rg.equals(that.rg) && endereco.equals(that.endereco) && email.equals(that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigoFuncionario, nome, nomeSocial, cargo, dataNascimento, cpf, rg, endereco, email);
     }
 }
 
