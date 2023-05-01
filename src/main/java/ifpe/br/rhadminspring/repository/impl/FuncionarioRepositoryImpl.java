@@ -1,18 +1,16 @@
 package ifpe.br.rhadminspring.repository.impl;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import ifpe.br.rhadminspring.config.LocalDateCodec;
-import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
+import ifpe.br.rhadminspring.config.CargoCodec;
+import ifpe.br.rhadminspring.config.EnderecoCodec;
+import ifpe.br.rhadminspring.config.FuncionarioCodec;
 import ifpe.br.rhadminspring.model.Funcionario;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
-import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -39,8 +36,17 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepository {
 
 
     public MongoCollection<Funcionario> getCollection() {
-        CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring", Funcionario.class)
+        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(
+                        PojoCodecProvider.builder().automatic(true)
+                                .register(EnderecoCodec.class)
+                                .register(CargoCodec.class)
+                                .register(FuncionarioCodec.class)
+                                .build()
+                )
+        );
+        return mongoClient.getDatabase("rhadmin-spring").getCollection("funcionarios", Funcionario.class)
                 .withCodecRegistry(pojoCodecRegistry);
     }
 
@@ -68,7 +74,7 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepository {
 
         FindIterable<Funcionario> funcionarioFindIterable = getCollection().find();
 
-        for(Funcionario funcionario : funcionarioFindIterable){
+        for (Funcionario funcionario : funcionarioFindIterable) {
             funcionarios.add(funcionario);
         }
 

@@ -30,16 +30,16 @@ import static org.mockito.Mockito.*;
 class FuncionarioRepositoryImplTest {
 
     @Mock
-    MongoClient mongoClient;
+    private MongoClient mongoClient;
 
     @InjectMocks
-    FuncionarioRepositoryImpl funcionarioRepositoryImpl;
+    private FuncionarioRepositoryImpl funcionarioRepositoryImpl;
 
     @Mock
-    MongoDatabase database;
+    private MongoDatabase database;
 
     @Mock
-    MongoCollection<Funcionario> coll;
+    private MongoCollection<Funcionario> coll;
 
     @Mock
     private FindIterable<Funcionario> findIterable;

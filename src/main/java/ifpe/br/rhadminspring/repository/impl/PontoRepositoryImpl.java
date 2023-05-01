@@ -3,11 +3,12 @@ package ifpe.br.rhadminspring.repository.impl;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import ifpe.br.rhadminspring.config.PontoCodec;
 import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
 import ifpe.br.rhadminspring.model.Ponto;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
 import ifpe.br.rhadminspring.repository.PontoRepository;
-import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,16 @@ public class PontoRepositoryImpl implements PontoRepository {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    private MongoCollection<Ponto> getCollection() {
-        CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring", Ponto.class)
+    public MongoCollection<Ponto> getCollection() {
+        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(
+                        PojoCodecProvider.builder().automatic(true)
+                                .register(PontoCodec.class)
+                                .build()
+                )
+        );
+        return mongoClient.getDatabase("rhadmin-spring").getCollection("ponto", Ponto.class)
                 .withCodecRegistry(pojoCodecRegistry);
     }
 

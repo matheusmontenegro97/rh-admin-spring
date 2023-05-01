@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.lang.String.format;
-
 @RestController
 @RequestMapping("/rh/api")
 public class FuncionarioController {

@@ -32,37 +32,36 @@ import static org.mockito.Mockito.times;
 public class AtestadoRepositoryImplTest {
 
     @Mock
-    MongoClient mongoClient;
+    private MongoClient mongoClient;
 
     @InjectMocks
-    AtestadoRepositoryImpl atestadoRepositoryImpl;
+    private AtestadoRepositoryImpl atestadoRepositoryImpl;
 
     @Mock
-    MongoDatabase database;
-
-
-    @Mock
-    MongoCollection<Atestado> coll;
+    private MongoDatabase database;
 
     @Mock
-    MongoCollection<GridFSFile> collGrid;
+    private MongoCollection<Atestado> coll;
 
     @Mock
-    MongoCollection<Document> collGridChunks;
+    private MongoCollection<GridFSFile> collGrid;
 
     @Mock
-    MongoCollection<Object> collGridObject;
+    private MongoCollection<Document> collGridChunks;
 
     @Mock
-    FuncionarioRepositoryImpl funcionarioRepository;
+    private MongoCollection<Object> collGridObject;
 
     @Mock
-    GridFSBucket gridFSBucket;
-
-    ObjectId objectId = new ObjectId();
+    private FuncionarioRepositoryImpl funcionarioRepository;
 
     @Mock
-    FindIterable<Object> findIterable;
+    private GridFSBucket gridFSBucket;
+
+    private ObjectId objectId = new ObjectId();
+
+    @Mock
+    private FindIterable<Object> findIterable;
 
     @Test
     public void saveAtestadoTest() throws Exception {

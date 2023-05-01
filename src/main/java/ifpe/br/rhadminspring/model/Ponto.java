@@ -15,6 +15,19 @@ public class Ponto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate data;
 
+    public Ponto() {
+    }
+
+    public Ponto(String codigoPonto, String codigoFuncionario, LocalTime horaEntradaTrabalho, LocalTime horaSaidaAlmoco, LocalTime horaVoltaAlmoco, LocalTime horaSaidaTrabalho, LocalDate data) {
+        this.codigoPonto = codigoPonto;
+        this.codigoFuncionario = codigoFuncionario;
+        this.horaEntradaTrabalho = horaEntradaTrabalho;
+        this.horaSaidaAlmoco = horaSaidaAlmoco;
+        this.horaVoltaAlmoco = horaVoltaAlmoco;
+        this.horaSaidaTrabalho = horaSaidaTrabalho;
+        this.data = data;
+    }
+
     public String getCodigoPonto() {
         return codigoPonto;
     }

@@ -8,7 +8,8 @@ public class Atestado {
     public Atestado() {
     }
 
-    public Atestado(String codigoFuncionario, String atestado) {
+    public Atestado(String codigoAtestado, String codigoFuncionario, String atestado) {
+        this.codigoAtestado = codigoAtestado;
         this.codigoFuncionario = codigoFuncionario;
         this.atestado = atestado;
     }

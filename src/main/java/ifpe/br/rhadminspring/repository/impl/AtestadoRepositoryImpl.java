@@ -5,10 +5,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
+import ifpe.br.rhadminspring.config.AtestadoCodec;
 import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
 import ifpe.br.rhadminspring.model.Atestado;
 import ifpe.br.rhadminspring.repository.AtestadoRepository;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,16 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    private MongoCollection<Atestado> getCollection() {
-        CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring", Atestado.class)
+    public MongoCollection<Atestado> getCollection() {
+        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(
+                        PojoCodecProvider.builder().automatic(true)
+                                .register(AtestadoCodec.class)
+                                .build()
+                )
+        );
+        return mongoClient.getDatabase("rhadmin-spring").getCollection("atestado", Atestado.class)
                 .withCodecRegistry(pojoCodecRegistry);
     }
 

@@ -19,6 +19,21 @@ public class Funcionario {
     private Endereco endereco;
     private String email;
 
+    public Funcionario() {
+    }
+
+    public Funcionario(String codigoFuncionario, String nome, String nomeSocial, Cargo cargo, LocalDate dataNascimento, String cpf, String rg, Endereco endereco, String email) {
+        this.codigoFuncionario = codigoFuncionario;
+        this.nome = nome;
+        this.nomeSocial = nomeSocial;
+        this.cargo = cargo;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.endereco = endereco;
+        this.email = email;
+    }
+
     public String getCodigoFuncionario() {
         return codigoFuncionario;
     }
