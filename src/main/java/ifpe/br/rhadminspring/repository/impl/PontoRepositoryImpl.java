@@ -25,9 +25,10 @@ public class PontoRepositoryImpl implements PontoRepository {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    private MongoCollection<Document> getCollection() {
+    private MongoCollection<Ponto> getCollection() {
         CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring").withCodecRegistry(pojoCodecRegistry);
+        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring", Ponto.class)
+                .withCodecRegistry(pojoCodecRegistry);
     }
 
     public Ponto savePonto(Ponto ponto) throws Exception {
@@ -37,16 +38,7 @@ public class PontoRepositoryImpl implements PontoRepository {
 
         ponto.setCodigoPonto(UUID.randomUUID().toString());
 
-        Document document = new Document()
-                .append("codigoPonto", ponto.getCodigoPonto())
-                .append("codigoFuncionario", ponto.getCodigoFuncionario())
-                .append("horaEntradaTrabalho", ponto.getHoraEntradaTrabalho())
-                .append("horaSaidaAlmoco", ponto.getHoraSaidaAlmoco())
-                .append("horaVoltaAlmoco", ponto.getHoraVoltaAlmoco())
-                .append("horaSaidaTrabalho", ponto.getHoraSaidaTrabalho())
-                .append("data", ponto.getData());
-
-        getCollection().insertOne(document);
+        getCollection().insertOne(ponto);
 
         return ponto;
     }

@@ -1,6 +1,7 @@
 package ifpe.br.rhadminspring.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
 import ifpe.br.rhadminspring.model.Funcionario;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class FuncionarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Funcionario> updateFuncionario
-            (@PathVariable("id") String id, @RequestBody Funcionario funcionario) {
+            (@PathVariable("id") String id, @RequestBody Funcionario funcionario) throws FuncionarioNotFoundException {
         return ResponseEntity.ok(funcionarioRepository.updateFuncionario(id, funcionario));
     }
 

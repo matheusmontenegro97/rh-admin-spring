@@ -9,15 +9,14 @@ import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
 import ifpe.br.rhadminspring.model.Atestado;
 import ifpe.br.rhadminspring.repository.AtestadoRepository;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
-import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.Objects;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,9 +29,10 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    private MongoCollection<Document> getCollection() {
+    private MongoCollection<Atestado> getCollection() {
         CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), org.bson.codecs.configuration.CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring").withCodecRegistry(pojoCodecRegistry);
+        return mongoClient.getDatabase("rhadmin-spring").getCollection("rhadmin-spring", Atestado.class)
+                .withCodecRegistry(pojoCodecRegistry);
     }
 
     private GridFSBucket getGridFSBuckets() {
@@ -40,8 +40,10 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
     }
 
     public Atestado saveAtestado(Atestado atestado) throws Exception {
+
         Optional.of(funcionarioRepository.findFuncionarioById(atestado.getCodigoFuncionario()))
-                .orElseThrow(() -> new FuncionarioNotFoundException(String.format("Funcionario com id: %s não encontrado", atestado.getCodigoFuncionario())));
+                .orElseThrow(() ->
+                        new FuncionarioNotFoundException(String.format("Funcionario com id: %s não encontrado", atestado.getCodigoFuncionario())));
 
         atestado.setCodigoAtestado(UUID.randomUUID().toString());
 
@@ -49,11 +51,7 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
         InputStream targetStream = new FileInputStream(file);
         getGridFSBuckets().uploadFromStream(atestado.getCodigoAtestado(), targetStream);
 
-        Document document = new Document()
-                .append("codigoAtestado", atestado.getCodigoAtestado())
-                .append("codigoFuncionario", atestado.getCodigoFuncionario());
-
-        getCollection().insertOne(document);
+        getCollection().insertOne(atestado);
 
         return atestado;
     }

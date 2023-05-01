@@ -1,13 +1,13 @@
 package ifpe.br.rhadminspring.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import ifpe.br.rhadminspring.exceptions.FuncionarioNotFoundException;
 import ifpe.br.rhadminspring.model.Funcionario;
 import ifpe.br.rhadminspring.repository.FuncionarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
@@ -19,7 +19,6 @@ import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +55,7 @@ public class FuncionarioControllerTest {
     }
 
     @Test
-    void updateFuncionarioSuccessTest(){
+    void updateFuncionarioSuccessTest() throws FuncionarioNotFoundException {
         Funcionario funcionario = new Funcionario();
         funcionario.setNome("name");
 
