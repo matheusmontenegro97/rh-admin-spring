@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,9 +51,8 @@ public class AtestadoRepositoryImpl implements AtestadoRepository {
 
     public Atestado saveAtestado(Atestado atestado) throws Exception {
 
-        Optional.of(funcionarioRepository.findFuncionarioById(atestado.getCodigoFuncionario()))
-                .orElseThrow(() ->
-                        new FuncionarioNotFoundException(String.format("Funcionario com id: %s não encontrado", atestado.getCodigoFuncionario())));
+        if (Objects.isNull(funcionarioRepository.findFuncionarioById(atestado.getCodigoFuncionario())))
+            throw new FuncionarioNotFoundException(String.format("Funcionario com id: %s não encontrado", atestado.getCodigoFuncionario()));
 
         atestado.setCodigoAtestado(UUID.randomUUID().toString());
 

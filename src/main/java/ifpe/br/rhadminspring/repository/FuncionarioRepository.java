@@ -14,7 +14,7 @@ public interface FuncionarioRepository {
 
     List<Funcionario> findAll() throws JsonProcessingException;
 
-    Funcionario findFuncionarioById(String codigoFuncionario) throws JsonProcessingException;
+    Funcionario findFuncionarioById(String codigoFuncionario);
 
     String deleteFuncionarioById(String codigoFuncionario);
 }
