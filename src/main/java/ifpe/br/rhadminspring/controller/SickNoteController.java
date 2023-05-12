@@ -1,7 +1,7 @@
 package ifpe.br.rhadminspring.controller;
 
-import ifpe.br.rhadminspring.model.Atestado;
-import ifpe.br.rhadminspring.repository.AtestadoRepository;
+import ifpe.br.rhadminspring.model.SickNote;
+import ifpe.br.rhadminspring.repository.SickNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rh/api/atestado")
-public class AtestadoController {
+@RequestMapping("/rh/api/sickNote")
+public class SickNoteController {
 
     @Autowired
-    private AtestadoRepository atestadoRepository;
+    private SickNoteRepository sickNoteRepository;
 
     @PostMapping
-    public ResponseEntity<Atestado> saveAtestado(@RequestBody Atestado atestado) throws Exception {
+    public ResponseEntity<SickNote> saveSickNote(@RequestBody SickNote sickNote) throws Exception {
 
-        return ResponseEntity.ok(atestadoRepository.saveAtestado(atestado));
+        return ResponseEntity.ok(sickNoteRepository.saveSickNote(sickNote));
     }
 
 }
